@@ -1,0 +1,49 @@
+Attribute VB_Name = "okstr"
+Option Explicit
+
+'Win32 API call
+Private Declare Function WriteProfileSection Lib "kernel32" Alias "WriteProfileSectionA" (ByVal lpAppName As String, ByVal lpString As String) As Long
+
+Public Function AppAutoStart() As Boolean
+
+    '***********************************************************************
+    ' Name        : AppAutoStart
+    '
+    ' Description : Open an application automatically when Windows starts.
+    '
+    ' Parameters  : None.
+    '
+    ' Returns     : Boolean - True if successful, else False.
+    '***********************************************************************
+
+    Dim strApp As String  'path to the application and the executable name
+    Dim lngRetval As Long 'Win32 API call return value
+    
+    'build the application path and name
+    strApp = App.Path & "\" & App.EXEName & ".exe"
+
+    'issue Win32 API call to write to the registry (returns non-zero if successful)
+    lngRetval = WriteProfileSection("Windows", "Load=" & strApp & vbCrLf & "open=""" & strApp & """")
+
+    'return success/fail
+    AppAutoStart = lngRetval
+
+End Function
+
+Public Function AppAutoStop() As Boolean
+
+    '***********************************************************************
+    ' Name        : AppAutoStop
+    '
+    ' Description : Stop an application automatically starting when Windows starts.
+    '
+    ' Parameters  : None.
+    '
+    ' Returns     : Boolean - True if successful, else False.
+    '***********************************************************************
+
+    'return success/fail
+    AppAutoStop = WriteProfileSection("Windows", "Load=")
+    
+End Function
+
