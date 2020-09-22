@@ -1,0 +1,2 @@
+1) Do not copy chess.exe on your computer unless you know how
+to stop and exit the application
